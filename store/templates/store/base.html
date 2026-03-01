@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JuicyDesign Store</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; padding: 20px; line-height: 1.6; color: #333; }
+        nav { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #007bff; }
+        .container { max-width: 800px; margin: auto; }
+        .product-card { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 8px; }
+        .btn { display: inline-block; background: #007bff; color: #fff; padding: 8px 15px; text-decoration: none; border-radius: 4px; border: none; cursor: pointer; }
+        .btn-clear { background: #dc3545; }
+        .cart-summary { background: #f8f9fa; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
+        form div { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="{% url 'product_list' %}">Home</a>
+            <a href="{% url 'report_view' %}">View Report (Cart)</a>
+            <a href="{% url 'clear_cart' %}" style="color: red;">Clear Cart</a>
+        </nav>
+        
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

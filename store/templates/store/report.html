@@ -1,0 +1,49 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+    <h1>Order Report</h1>
+
+    {% if selected_items %}
+        <div style="margin-bottom: 20px;">
+            {% for item in selected_items %}
+                <div class="product-card">
+                    <strong>{{ item.product.name }}</strong> (x{{ item.quantity }})<br>
+                    
+                    {% if item.color %}
+                        Color: {{ item.color.name }} (+{{ item.color.extra_price }} zł)<br>
+                    {% endif %}
+
+                    {% if item.options %}
+                        Options:
+                        <ul style="margin: 5px 0;">
+                            {% for option in item.options %}
+                                <li>{{ option.name }} (+{{ option.extra_price }} zł)</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    
+                    <strong>Total for item:</strong> {{ item.item_total }} zł
+                </div>
+            {% endfor %}
+        </div>
+
+        <div style="background: #eef; padding: 20px; border-radius: 8px;">
+            <h3>Total order price: {{ total_price }} zł</h3>
+            
+            <form method="POST">
+                {% csrf_token %}
+                <div style="margin-top: 15px;">
+                    <label for="comment"><strong>Comments:</strong></label><br>
+                    <textarea name="comment" id="comment" rows="4" style="width: 100%; margin-top: 5px;">{{ comment }}</textarea>
+                </div>
+                <button type="submit" class="btn">Update Report / Save Comment</button>
+            </form>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <a href="{% url 'clear_cart' %}" class="btn btn-clear">Clear Cart & New Order</a>
+        </div>
+    {% else %}
+        <p>Your cart is empty. <a href="{% url 'product_list' %}">Go back to product list</a>.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+    <h1>Configure {{ product.name }}</h1>
+    <p>{{ product.description }}</p>
+
+    <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+        <!-- Image Preview Section -->
+        <div style="flex: 1; min-width: 300px;">
+            <div id="image-container" style="border: 1px solid #ddd; padding: 10px; border-radius: 8px; text-align: center; min-height: 300px; display: flex; align-items: center; justify-content: center; background: #f9f9f9;">
+                <img id="variant-image" src="" alt="Select a color" style="max-width: 100%; height: auto; display: none;">
+                <p id="no-image-text" style="color: #999;">No image available for this variant</p>
+            </div>
+        </div>
+
+        <!-- Configuration Form -->
+        <div style="flex: 1; min-width: 300px;">
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div>
+                    <strong>Base Price:</strong> {{ product.price }} zł
+                </div>
+
+                <div>
+                    <label for="quantity"><strong>Quantity:</strong></label>
+                    <input type="number" name="quantity" id="quantity" value="1" min="1" style="width: 50px;">
+                </div>
+
+                {% if product.colors.all %}
+                <div style="margin-top: 15px;">
+                    <strong>Choose Color:</strong><br>
+                    {% for color in product.colors.all %}
+                        <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+                            <input type="radio" name="color" value="{{ color.id }}" 
+                                   {% if color.id == initial_color_id %}checked{% endif %}
+                                   data-image="{% if color.image %}{{ color.image.url }}{% endif %}"
+                                   onchange="updateImage(this)">
+                            {{ color.name }} 
+                            {% if color.extra_price > 0 %}(+{{ color.extra_price }} zł){% endif %}
+                            <span style="display: inline-block; width: 15px; height: 15px; background: {{ color.hex_code }}; border: 1px solid #000; vertical-align: middle; margin-left: 5px;"></span>
+                        </label>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if product.options.all %}
+                <div style="margin-top: 15px;">
+                    <strong>Additional Options:</strong><br>
+                    {% for option in product.options.all %}
+                        <label style="display: block; margin-bottom: 5px;">
+                            <input type="checkbox" name="options" value="{{ option.id }}">
+                            {{ option.name }} 
+                            {% if option.extra_price > 0 %}(+{{ option.extra_price }} zł){% endif %}
+                        </label>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div style="margin-top: 20px;">
+                    <button type="submit" class="btn">Add to Cart</button>
+                    <a href="{% url 'product_list' %}" style="margin-left: 10px; color: #666;">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function updateImage(input) {
+            const imageUrl = input.getAttribute('data-image');
+            const imgElement = document.getElementById('variant-image');
+            const noImageText = document.getElementById('no-image-text');
+
+            if (imageUrl) {
+                imgElement.src = imageUrl;
+                imgElement.style.display = 'block';
+                noImageText.style.display = 'none';
+            } else {
+                imgElement.style.display = 'none';
+                noImageText.style.display = 'block';
+            }
+        }
+
+        // Initialize image on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkedRadio = document.querySelector('input[name="color"]:checked');
+            if (checkedRadio) {
+                updateImage(checkedRadio);
+            }
+        });
+    </script>
+{% endblock %}

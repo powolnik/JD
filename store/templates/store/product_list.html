@@ -1,0 +1,26 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+    <h1>Products</h1>
+    
+    <div class="cart-summary">
+        <strong>Cart:</strong> {{ cart_count }} items | <strong>Total:</strong> {{ total_cart_price }} zł
+    </div>
+
+    {% for product in products %}
+        <div class="product-card">
+            <h3>{{ product.name }}</h3>
+            <p>Base price: {{ product.price }} zł</p>
+            
+            {% if product.random_variant_image %}
+                <div style="margin: 10px 0;">
+                    <img src="{{ product.random_variant_image }}" alt="{{ product.name }}" style="max-width: 200px; height: auto;">
+                </div>
+            {% endif %}
+            
+            <a href="{% url 'product_configure' product.id %}" class="btn">Configure & Add to Cart</a>
+        </div>
+    {% empty %}
+        <p>No products available yet. Add some via the <a href="/admin/">admin panel</a>.</p>
+    {% endfor %}
+{% endblock %}
