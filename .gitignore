@@ -1,1 +1,47 @@
 .aider*
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+media
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# Database
+*.sqlite3
+*.sqlite
+
+# Static and media files
+static/
+media/
+
+# Compiled files
+*.py[cod]
+*$py.class
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
