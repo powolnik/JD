@@ -25,9 +25,9 @@ env/
 *.sqlite
 
 # Static and media files
-static/
-media/
-*.png
+.static/
+.media/
+
 
 # Compiled files
 *.py[cod]
